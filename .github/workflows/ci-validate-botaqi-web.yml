@@ -1,0 +1,37 @@
+name: Validate botaqi-web build
+
+on:
+  push:
+    branches: [feat/functions-kill-switch]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure `botaqi-web/vercel.json` rootDirectory
+        run: |
+          if [ ! -f botaqi-web/vercel.json ]; then
+            echo "Missing botaqi-web/vercel.json"; exit 1
+          fi
+          grep -q '"rootDirectory"\s*:\s*"botaqi-web"' botaqi-web/vercel.json || (echo "rootDirectory not set to botaqi-web"; cat botaqi-web/vercel.json; exit 1)
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: botaqi-web
+        run: npm ci --no-audit --no-fund
+
+      - name: Build
+        working-directory: botaqi-web
+        run: npm run build
+
+      - name: Verify output
+        run: test -d botaqi-web/dist || (echo "build output missing: botaqi-web/dist" && exit 1)
