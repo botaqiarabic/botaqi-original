@@ -21,30 +21,16 @@
 
 ## Deployment (Vercel)
 
-### Prerequisites
-- Vercel account and CLI installed
-- Firebase project configured (see `docs/auth-setup.md`)
+**⚠️ CRITICAL BEFORE DEPLOYING:**  
+Read and follow [DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md) to safely rotate secrets, provision Vercel env vars, and run smoke tests.
 
-### Deploy
-```bash
-vercel --prod
-```
+### Quick Reference
+1. **Rotate secrets** (OpenAI key + LOGBLOCKED_API_KEY) — 15 min
+2. **Provision Vercel secrets** (3 env vars: Firebase Admin, OpenAI, LOGBLOCKED) — 5 min
+3. **Deploy:** `vercel --prod` — 3 min
+4. **Smoke test:** Verify landing page + analytics + API endpoints — 5 min
 
-### Environment Variables (Vercel Dashboard)
-Add these to your Vercel project settings:
-- `VITE_FIREBASE_API_KEY`
-- `VITE_FIREBASE_AUTH_DOMAIN`
-- `VITE_FIREBASE_PROJECT_ID`
-- `VITE_FIREBASE_STORAGE_BUCKET`
-- `VITE_FIREBASE_MESSAGING_SENDER_ID`
-- `VITE_FIREBASE_APP_ID`
-- `VITE_FIREBASE_MEASUREMENT_ID`
-
-### Post-Deploy Verification
-1. Check Vercel build logs for success
-2. Visit the preview/production URL
-3. Test Landing page → Login → Dashboard
-4. Verify Firestore `landing_analytics` collection has events
+For detailed step-by-step guide, see **[DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md)** (covers all phases: secret rotation, history purge, Vercel setup, testing, rollback)
 
 ## Project Structure
 
