@@ -1,5 +1,4 @@
 {
-  "rootDirectory": "botaqi-web",
   "rewrites": [
     {
       "source": "/(.*)",
