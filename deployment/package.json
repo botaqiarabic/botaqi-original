@@ -1,0 +1,19 @@
+{
+  "name": "botaqi-deployer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Hyper-efficient deployment automation for Botaqi.",
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "scripts": {
+    "deploy:phase0": "node deploy.js --phase=0",
+    "deploy:phase0:mock": "node deploy.js --phase=0 --mock",
+    "smoke:phase0": "node smoke-test-phase0.js"
+  },
+  "dependencies": {
+    "@vercel/client": "^17.2.16",
+    "google-auth-library": "^10.5.0"
+  }
+}

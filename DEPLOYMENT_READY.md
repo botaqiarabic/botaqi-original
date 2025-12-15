@@ -28,6 +28,13 @@
    - **Updated README.md**: Links to deployment checklist
    - **Updated .env.example**: Production-ready template with all required fields
 
+5. **Phase 0 Automation (NEW)** (`/deployment`)
+   - `deploy-core.js`: Rollback manager + prerequisite validation matrix
+   - `platform-detector.js`: OS-aware runtime detection (shared by future wrappers)
+   - `deploy.js`: Single entry (`node deploy.js --phase=0`) with `--mock` support
+   - `smoke-test-phase0.js`: CI-safe harness (skips networked checks)
+   - `npm run deploy:phase0` now verifies Node, git state, CLI tools, Firebase SA, OpenAI key, Vercel linkage, port 8080
+
 ### ✅ Commits Staged & Pushed
 ```
 5f7a40a docs: link README to DEPLOYMENT_CHECKLIST
@@ -42,6 +49,16 @@ f3776bd chore(botaqi): finalize deployment package
 ---
 
 ## Next Steps: Manual Actions (You Must Execute)
+
+**0. Automated Preflight (new requirement)**
+```bash
+cd deployment
+npm install          # first run only
+npm run deploy:phase0
+```
+- Exit code 0: proceed to Phase 1 below
+- Exit code 1/2: check `deployment/logs/` for the failed prerequisite and remediate before retrying
+- Use `npm run deploy:phase0 -- --mock` for CI smoke or environments lacking real secrets
 
 ### 🔴 Phase 1: Rotate Exposed Secrets (15–30 min)
 
