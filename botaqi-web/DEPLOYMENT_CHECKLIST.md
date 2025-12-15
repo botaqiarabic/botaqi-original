@@ -14,6 +14,7 @@
 - ✅ Husky pre-commit hook installed (blocks secret patterns)
 - ✅ GitHub Actions CI workflow live (build, lint, secret-scan)
 - ✅ All security commits pushed to `feat/botaqi-deploy` branch
+- ✅ **NEW:** Phase 0 automation scaffolding (`/deployment`)
 
 **Verification:**
 ```bash
@@ -23,6 +24,36 @@ git log --oneline -3
 # 31324f8 security(p0): add .env.example template...
 # f3776bd chore(botaqi): finalize deployment package...
 ```
+
+---
+
+## Phase 0: Automated Preflight (run before Phase 1)
+
+**What it does:** Verifies Node version, package manifests, env templates, git cleanliness, CLI availability, service account authenticity, OpenAI reachability, Vercel linkage, and port 8080 availability. All checks are logged and backed by the transaction-based rollback manager.
+
+**How to run:**
+```bash
+cd deployment
+# First time only
+npm install
+
+# Real run (requires live secrets + CLIs installed)
+npm run deploy:phase0
+
+# Dry-run for CI/local smoke test (skips networked checks)
+npm run deploy:phase0 -- --mock
+```
+
+**What to expect:**
+- Exit code 0 = every prerequisite satisfied (takes ~40–60s)
+- Exit code 1 = missing prerequisite; log file written to `deployment/logs/`
+- Rollback manager unwinds any attempted remediation automatically
+- Summary table printed listing each check with message
+
+**Troubleshooting:**
+- Logs: `deployment/logs/phase0-*.log`
+- Re-run with `DEBUG=1 npm run deploy:phase0` (coming in next phases for verbose mode)
+- Use `npm run smoke:phase0` to validate the automation layer itself (mocked network checks)
 
 ---
 

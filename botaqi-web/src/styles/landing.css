@@ -1,0 +1,91 @@
+:root {
+  --gold-primary: #D4AF37;
+  --gold-hover: #C5A028;
+  --deep-blue: #0A192F;
+  --text-light: #F8F9FA;
+  --font-arabic: 'Amiri', serif;
+  --font-english: 'Inter', sans-serif;
+}
+
+body {
+  background-color: var(--deep-blue);
+  color: var(--text-light);
+  font-family: var(--font-english);
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.luxury-button {
+  background: linear-gradient(135deg, var(--gold-primary), var(--gold-hover));
+  color: var(--deep-blue);
+  padding: 1rem 2.5rem;
+  border: none;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.luxury-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+}
+
+.geometric-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
+  background-size: 40px 40px;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.hero-section {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.arabic-title {
+  font-family: var(--font-arabic);
+  font-size: 4rem;
+  color: var(--gold-primary);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.feature-card:hover {
+  border-color: var(--gold-primary);
+}
+
+[dir="rtl"] {
+  font-family: var(--font-arabic);
+}

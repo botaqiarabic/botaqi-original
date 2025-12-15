@@ -1,0 +1,282 @@
+{
+  "categories": [
+    {
+      "id": "family",
+      "name": "Family & Relationships",
+      "description": "Learn vocabulary for family members and relationships",
+      "color": "#3B82F6",
+      "icon": "👨‍👩‍👧‍👦"
+    },
+    {
+      "id": "work",
+      "name": "Work & Business",
+      "description": "Professional vocabulary and workplace conversations",
+      "color": "#10B981",
+      "icon": "💼"
+    },
+    {
+      "id": "travel",
+      "name": "Travel & Tourism",
+      "description": "Essential phrases for travelers",
+      "color": "#F59E0B",
+      "icon": "✈️"
+    },
+    {
+      "id": "food",
+      "name": "Food & Dining",
+      "description": "Restaurant and food-related vocabulary",
+      "color": "#EF4444",
+      "icon": "🍽️"
+    },
+    {
+      "id": "shopping",
+      "name": "Shopping & Markets",
+      "description": "Shopping and market conversations",
+      "color": "#8B5CF6",
+      "icon": "🛍️"
+    },
+    {
+      "id": "health",
+      "name": "Health & Medical",
+      "description": "Medical and health-related vocabulary",
+      "color": "#06B6D4",
+      "icon": "🏥"
+    },
+    {
+      "id": "education",
+      "name": "Education & Learning",
+      "description": "School and learning vocabulary",
+      "color": "#84CC16",
+      "icon": "📚"
+    },
+    {
+      "id": "social",
+      "name": "Social & Cultural",
+      "description": "Social interactions and cultural topics",
+      "color": "#F97316",
+      "icon": "🎭"
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "fam_001",
+      "category": "family",
+      "difficulty": 1,
+      "front": "أبي",
+      "back": "My father",
+      "hint": "A respectful way to refer to your father",
+      "example": "أبي يعمل في البنك",
+      "audio": "/audio/abi.mp3",
+      "tags": ["family", "father", "parent"]
+    },
+    {
+      "id": "fam_002",
+      "category": "family",
+      "difficulty": 1,
+      "front": "أمي",
+      "back": "My mother",
+      "hint": "A respectful way to refer to your mother",
+      "example": "أمي تطبخ الطعام",
+      "audio": "/audio/umi.mp3",
+      "tags": ["family", "mother", "parent"]
+    },
+    {
+      "id": "fam_003",
+      "category": "family",
+      "difficulty": 2,
+      "front": "أخي",
+      "back": "My brother",
+      "hint": "Used for both older and younger brothers",
+      "example": "أخي يدرس في الجامعة",
+      "audio": "/audio/akhi.mp3",
+      "tags": ["family", "brother", "sibling"]
+    },
+    {
+      "id": "fam_004",
+      "category": "family",
+      "difficulty": 2,
+      "front": "أختي",
+      "back": "My sister",
+      "hint": "Used for both older and younger sisters",
+      "example": "أختي تعمل في المستشفى",
+      "audio": "/audio/ukhti.mp3",
+      "tags": ["family", "sister", "sibling"]
+    },
+    {
+      "id": "fam_005",
+      "category": "family",
+      "difficulty": 3,
+      "front": "زوجي",
+      "back": "My husband",
+      "hint": "Formal way to refer to your husband",
+      "example": "زوجي يسافر كثيراً للعمل",
+      "audio": "/audio/zawji.mp3",
+      "tags": ["family", "husband", "spouse"]
+    },
+    {
+      "id": "work_001",
+      "category": "work",
+      "difficulty": 2,
+      "front": "شلونك؟",
+      "back": "How are you?",
+      "hint": "Common Gulf Arabic greeting",
+      "example": "شلونك؟ أنا بخير، شكراً",
+      "audio": "/audio/shlonak.mp3",
+      "tags": ["greeting", "work", "conversation"]
+    },
+    {
+      "id": "work_002",
+      "category": "work",
+      "difficulty": 3,
+      "front": "أشغلك إيش؟",
+      "back": "What do you do for work?",
+      "hint": "Asking about someone's profession",
+      "example": "أشغلك إيش؟ أنا مهندس",
+      "audio": "/audio/ashghalak.mp3",
+      "tags": ["work", "profession", "question"]
+    },
+    {
+      "id": "work_003",
+      "category": "work",
+      "difficulty": 3,
+      "front": "أنا موظف",
+      "back": "I am an employee",
+      "hint": "Describing your employment status",
+      "example": "أنا موظف في شركة النفط",
+      "audio": "/audio/ana_muwazzaf.mp3",
+      "tags": ["work", "employment", "status"]
+    },
+    {
+      "id": "travel_001",
+      "category": "travel",
+      "difficulty": 2,
+      "front": "وين المطار؟",
+      "back": "Where is the airport?",
+      "hint": "Essential question for travelers",
+      "example": "وين المطار؟ المطار في الشمال",
+      "audio": "/audio/wayn_almatar.mp3",
+      "tags": ["travel", "airport", "direction"]
+    },
+    {
+      "id": "travel_002",
+      "category": "travel",
+      "difficulty": 3,
+      "front": "كم ساعة بالطائرة؟",
+      "back": "How many hours by plane?",
+      "hint": "Asking about flight duration",
+      "example": "كم ساعة بالطائرة؟ ساعتين",
+      "audio": "/audio/kam_saa.mp3",
+      "tags": ["travel", "flight", "time", "duration"]
+    },
+    {
+      "id": "food_001",
+      "category": "food",
+      "difficulty": 1,
+      "front": "أريد ماء",
+      "back": "I want water",
+      "hint": "Basic request for water",
+      "example": "أريد ماء، من فضلك",
+      "audio": "/audio/arid_maa.mp3",
+      "tags": ["food", "water", "request"]
+    },
+    {
+      "id": "food_002",
+      "category": "food",
+      "difficulty": 2,
+      "front": "الطعام لذيذ",
+      "back": "The food is delicious",
+      "hint": "Complimenting the food",
+      "example": "الطعام لذيذ جداً، شكراً",
+      "audio": "/audio/taam_laziz.mp3",
+      "tags": ["food", "compliment", "delicious"]
+    },
+    {
+      "id": "shop_001",
+      "category": "shopping",
+      "difficulty": 2,
+      "front": "كم السعر؟",
+      "back": "What is the price?",
+      "hint": "Asking about the cost of something",
+      "example": "كم السعر؟ السعر خمسين ريال",
+      "audio": "/audio/kam_alsiar.mp3",
+      "tags": ["shopping", "price", "cost", "money"]
+    },
+    {
+      "id": "shop_002",
+      "category": "shopping",
+      "difficulty": 3,
+      "front": "هل عندكم تخفيض؟",
+      "back": "Do you have a discount?",
+      "hint": "Asking about available discounts",
+      "example": "هل عندكم تخفيض؟ نعم، عشرين بالمئة",
+      "audio": "/audio/hal_aindakum.mp3",
+      "tags": ["shopping", "discount", "bargain"]
+    },
+    {
+      "id": "health_001",
+      "category": "health",
+      "difficulty": 3,
+      "front": "أشعر بألم",
+      "back": "I feel pain",
+      "hint": "Describing physical discomfort",
+      "example": "أشعر بألم في رأسي",
+      "audio": "/audio/ashur_balam.mp3",
+      "tags": ["health", "pain", "medical", "symptoms"]
+    },
+    {
+      "id": "health_002",
+      "category": "health",
+      "difficulty": 4,
+      "front": "أحتاج لرؤية طبيب",
+      "back": "I need to see a doctor",
+      "hint": "Requesting medical attention",
+      "example": "أحتاج لرؤية طبيب، أشعر بتعب",
+      "audio": "/audio/ahtaj_liruyat_tabib.mp3",
+      "tags": ["health", "doctor", "medical", "appointment"]
+    },
+    {
+      "id": "edu_001",
+      "category": "education",
+      "difficulty": 2,
+      "front": "أنا أدرس",
+      "back": "I am studying",
+      "hint": "Describing your educational activity",
+      "example": "أنا أدرس اللغة العربية",
+      "audio": "/audio/ana_adrus.mp3",
+      "tags": ["education", "studying", "learning"]
+    },
+    {
+      "id": "edu_002",
+      "category": "education",
+      "difficulty": 3,
+      "front": "أريد أن أتعلم",
+      "back": "I want to learn",
+      "hint": "Expressing desire to learn something",
+      "example": "أريد أن أتعلم الطبخ",
+      "audio": "/audio/arid_an_ataalam.mp3",
+      "tags": ["education", "learning", "desire", "goal"]
+    },
+    {
+      "id": "social_001",
+      "category": "social",
+      "difficulty": 2,
+      "front": "مرحبا",
+      "back": "Hello",
+      "hint": "Common greeting in Gulf Arabic",
+      "example": "مرحبا، كيف حالك؟",
+      "audio": "/audio/marhaba.mp3",
+      "tags": ["social", "greeting", "hello", "welcome"]
+    },
+    {
+      "id": "social_002",
+      "category": "social",
+      "difficulty": 3,
+      "front": "شكراً جزيلاً",
+      "back": "Thank you very much",
+      "hint": "Expressing deep gratitude",
+      "example": "شكراً جزيلاً على مساعدتك",
+      "audio": "/audio/shukran_jazilan.mp3",
+      "tags": ["social", "thanks", "gratitude", "appreciation"]
+    }
+  ]
+}

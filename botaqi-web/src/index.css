@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Define ALL CSS variables first */
+:root {
+  /* Core colors - using Gulf-inspired palette */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 210 100% 50%; /* Gulf blue */
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 35 100% 50%; /* Gold accent */
+  --accent-foreground: 210 40% 98%;
+  --success: 142 76% 36%;
+  --success-foreground: 355 100% 97%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
+
+  /* Custom Gulfara colors */
+  --coin-gold: 45 100% 50%;
+  --streak-fire: 20 100% 50%;
+
+  /* Sidebar colors */
+  --sidebar-background: 210 40% 98%;
+  --sidebar-foreground: 222.2 84% 4.9%;
+  --sidebar-primary: 210 100% 50%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 210 40% 96%;
+  --sidebar-accent-foreground: 222.2 47.4% 11.2%;
+  --sidebar-border: 214.3 31.8% 91.4%;
+  --sidebar-ring: 222.2 84% 4.9%;
+
+  /* Gradients */
+  --luxury-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --sand-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  --indigo-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  /* Shadows */
+  --luxury-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --elevated-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* Transitions */
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Border radius */
+  --radius: 0.5rem;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+/* Base layer overrides */
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+    box-sizing: border-box;
+  }
+
+  body {
+    background: var(--sand-gradient);
+    color: hsl(var(--foreground));
+    font-family: 'Noto Sans Arabic', 'Arial', sans-serif;
+  }
+}
+
+/* Custom components */
+@layer components {
+  .flashcard {
+    background-color: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+    border-radius: 2rem;
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow), 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s;
+    will-change: transform, box-shadow;
+  }
+
+  .flashcard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--elevated-shadow);
+  }
+
+  .luxury-button {
+    background: var(--luxury-gradient);
+    color: hsl(var(--accent-foreground));
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 1rem;
+    box-shadow: var(--luxury-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: var(--transition-smooth);
+  }
+
+  .luxury-button:hover {
+    transform: scale(1.05);
+    box-shadow: var(--elevated-shadow), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  }
+
+  .coin-gold {
+    color: hsl(var(--coin-gold));
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  .streak-fire {
+    background: linear-gradient(to right, hsl(var(--streak-fire)), #ffd700);
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  /* Geometric pattern background */
+  .geometric-pattern {
+    background-image:
+      radial-gradient(circle at 25% 25%, hsl(var(--accent) / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, hsl(var(--primary) / 0.1) 0%, transparent 50%);
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out;
+  }
+}
+
+/* Utilities for flip animation */
+@layer utilities {
+  .perspective-1000 { perspective: 1000px; }
+  .transform-style-3d { transform-style: preserve-3d; }
+  .rotateY-0 { transform: rotateY(0deg); }
+  .rotateY-180 { transform: rotateY(180deg); }
+  .backface-hidden { backface-visibility: hidden; }
+}
+
+/* Keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
