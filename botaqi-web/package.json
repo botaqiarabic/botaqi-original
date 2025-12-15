@@ -8,8 +8,8 @@
     },
     "scripts": {
         "dev": "vite",
-            "build": "tsc -b && vite build",
-            "vercel-build": "npm run build",
+        "build": "tsc -b && vite build",
+        "vercel-build": "npm run build",
         "lint": "eslint .",
         "preview": "vite preview",
         "start": "node server.cjs",
@@ -68,12 +68,5 @@
         "typescript-eslint": "^8.0.1",
         "vite": "^7.1.10"
     },
-    "description": "1. **Install Dependencies:**\r    ```bash\r    npm install\r    ```",
-    "main": "tailwind.config.js",
-    "directories": {
-        "doc": "docs"
-    },
-    "keywords": [],
-    "author": "",
     "license": "ISC"
 }
