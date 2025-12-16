@@ -400,6 +400,22 @@ npx vercel dev --cwd .
   - Add the SENTRY_DSN and other required env vars into the Vercel Project Environment, and/or
   - Use the Vercel bypass token mechanism described in the docs to access the protected endpoint for automated checks.
 
+### Production test (bypass token example)
+
+If the project is protected you'll need a bypass token to request endpoints programmatically. Obtain the bypass token from Vercel (see docs) and then test with a query parameter as shown:
+
+```
+# Example (replace $BYPASS with real token):
+curl -i "https://botaqi-pm91krfw8-botaqis-projects.vercel.app/api/test-sentry?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=$BYPASS"
+
+# Alternatively, include in the cookie header if required:
+curl -i -H "Cookie: __vercel_bypass=$BYPASS" "https://botaqi-pm91krfw8-botaqis-projects.vercel.app/api/test-sentry"
+```
+
+Notes:
+- If you prefer not to use a bypass token, add `SENTRY_DSN` (and other required env vars) to the Vercel Project Environment (Production scope) and re-deploy — the /api/test-sentry endpoint will return 200 once Sentry is initialized.
+- The authentication page indicates deployment protection, not a missing function; no route changes are required if you see this page.
+
 5) Rollback
 - To rollback: revert the last commit that triggered the broken deploy and push, then run `npx vercel --prod --yes --cwd botaqi-web` to deploy the previous state.
 
