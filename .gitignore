@@ -31,3 +31,6 @@ node_modules/
 # Gulfara local secrets (migrated to envs/gulfara)
 gulfara/.env
 gulfara/.env.staging
+# Ignore Next.js build output and Next env helper
+/botaqi-web/.next/
+/botaqi-web/next-env.d.ts
