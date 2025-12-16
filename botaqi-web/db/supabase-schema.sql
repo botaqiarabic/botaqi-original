@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS categories (
 );
 
 CREATE TABLE IF NOT EXISTS flashcards (
-  id TEXT PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   category_id TEXT REFERENCES categories(id) ON DELETE CASCADE,
   difficulty INTEGER CHECK (difficulty BETWEEN 1 AND 5),
   front TEXT NOT NULL,
@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS study_sessions (
 CREATE TABLE IF NOT EXISTS session_cards (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   session_id UUID REFERENCES study_sessions(id) ON DELETE CASCADE,
-  card_id TEXT REFERENCES flashcards(id) ON DELETE CASCADE,
+  card_id UUID REFERENCES flashcards(id) ON DELETE CASCADE,
   user_answer TEXT,
   correct BOOLEAN,
   time_spent INTEGER,
@@ -191,22 +191,11 @@ CREATE TABLE IF NOT EXISTS user_achievements (
   UNIQUE(user_id, achievement_id)
 );
 
-CREATE TABLE IF NOT EXISTS vouchers (
-  id TEXT PRIMARY KEY,
-  code TEXT UNIQUE NOT NULL,
-  description TEXT NOT NULL,
-  points_required INTEGER NOT NULL,
-  max_uses INTEGER DEFAULT 1,
-  used_count INTEGER DEFAULT 0,
-  expires_at TIMESTAMP WITH TIME ZONE,
-  is_active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
+-- (vouchers table already declared earlier with UUID id; ensure user_vouchers references UUID)
 CREATE TABLE IF NOT EXISTS user_vouchers (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
-  voucher_id TEXT REFERENCES vouchers(id) ON DELETE CASCADE,
+  voucher_id UUID REFERENCES vouchers(id) ON DELETE CASCADE,
   claimed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   UNIQUE(user_id, voucher_id)
 );
@@ -215,7 +204,7 @@ CREATE TABLE IF NOT EXISTS user_vouchers (
 CREATE TABLE IF NOT EXISTS ai_adaptations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
-  card_id TEXT REFERENCES flashcards(id) ON DELETE CASCADE,
+  card_id UUID REFERENCES flashcards(id) ON DELETE CASCADE,
   previous_difficulty DECIMAL(3,2),
   new_difficulty DECIMAL(3,2),
   confidence DECIMAL(3,2),
@@ -228,7 +217,6 @@ CREATE TABLE IF NOT EXISTS ai_adaptations (
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_profiles_clerk_user_id ON profiles(clerk_user_id);
 CREATE INDEX IF NOT EXISTS idx_user_progress_user_id ON user_progress(user_id);
-CREATE INDEX IF NOT EXISTS idx_user_progress_next_review ON user_progress(next_review);
 CREATE INDEX IF NOT EXISTS idx_study_sessions_user_id ON study_sessions(user_id);
 CREATE INDEX IF NOT EXISTS idx_session_cards_session_id ON session_cards(session_id);
 CREATE INDEX IF NOT EXISTS idx_user_achievements_user_id ON user_achievements(user_id);
