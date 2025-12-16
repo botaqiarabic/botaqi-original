@@ -335,3 +335,40 @@ Before marking as "complete," confirm ALL items:
 ---
 
 **Questions?** Refer to [MANUAL_ACTIONS.md](docs2/MANUAL_ACTIONS.md) for detailed step-by-step guides.
+
+---
+
+## Appendix: Vercel configuration & quick recovery notes (2025-12-15)
+
+- Change applied: removed unsupported `rootDirectory` from `botaqi-web/vercel.json` and added an explicit `builds` entry using `@vercel/static-build` with `dist` as the output directory to force static-build behavior for our Vite app.
+- Why: Vercel's autodetection expected Next.js (caused missing .next routes-manifest errors). The `builds` entry tells Vercel exactly which builder to run and which dist folder to deploy.
+
+Key commands (repo root):
+```
+# build & verify locally (in botaqi-web)
+cd botaqi-web
+npm ci
+npm run vercel:build   # alias present -> runs vercel-build -> build
+
+# deploy via CLI from app dir (preferred)
+npx vercel --prod --yes --debug --cwd C:\Users\muzam\Projects\Gulfara\botaqi-web
+```
+
+Config notes (choice made):
+- `vercel.json` now contains a `builds` entry referencing `package.json` and `use: "@vercel/static-build"` with `distDir: "dist"` so Vercel executes the Vite static build and deploys `dist/`.
+- SPA fallback: routes include filesystem handle and a fallback to `/index.html` so client-side routes like `/app/dashboard` resolve.
+- `package.json` contains `vercel-build` and `vercel:build` scripts to ensure both `vercel-build` and `vercel:build` invocations work.
+
+CI / validation:
+- A lightweight GitHub Actions workflow added at `.github/workflows/ci-validate-botaqi-web.yml` that checks the vercel.json configuration and runs `npm ci && npm run build` inside `botaqi-web` to catch build/detection issues before deploy.
+
+Quick troubleshooting steps:
+- If Vercel rejects config: remove unsupported keys (see error message) and prefer app-level `builds.src` pointing to `botaqi-web/package.json`.
+- If routes 404: ensure SPA fallback route exists or set router `basename` (BrowserRouter) to `/app` if app is served under `/app`.
+- If build fails on Vercel but passes locally: confirm all build-time env vars are set in Vercel project settings.
+
+File references:
+- Vercel config: `botaqi-web/vercel.json`
+- CI workflow: `.github/workflows/ci-validate-botaqi-web.yml`
+- Build scripts: `botaqi-web/package.json` (scripts `vercel-build`, `vercel:build`)
+
