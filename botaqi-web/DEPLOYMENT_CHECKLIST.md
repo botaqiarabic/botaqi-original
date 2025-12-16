@@ -372,3 +372,38 @@ File references:
 - CI workflow: `.github/workflows/ci-validate-botaqi-web.yml`
 - Build scripts: `botaqi-web/package.json` (scripts `vercel-build`, `vercel:build`)
 
+---
+
+## Edge Function Deployment (MVP checklist)
+
+1) Purpose: run minimal API routes (server-side logic) as Vercel Serverless functions under `/api/*` and keep static SPA served by `@vercel/static-build` from `dist/`.
+
+2) Local verification
+- Build app: run in `botaqi-web`:
+```
+npm ci
+npm run vercel:build
+```
+- Start dev server for functions (interactive):
+```
+npx vercel dev --cwd .
+```
+- Test API locally: `curl -i http://127.0.0.1:3000/api/test-sentry` (returns 200 when SENTRY_DSN set, 400 when unset).
+
+3) Production deployment
+- Deploy: `npx vercel --prod --yes --cwd botaqi-web`
+- If site is private / protected, obtain Vercel bypass token or temporarily set project to public to test endpoints. See Vercel docs: https://vercel.com/docs/deployment-protection
+
+4) Production verification notes (what we did)
+- Production URL: https://botaqi-pm91krfw8-botaqis-projects.vercel.app
+- Observed: accessing `/api/test-sentry` returned a Vercel authentication page. This indicates project-level protection or private status. To programmatically test the endpoint you must either:
+  - Add the SENTRY_DSN and other required env vars into the Vercel Project Environment, and/or
+  - Use the Vercel bypass token mechanism described in the docs to access the protected endpoint for automated checks.
+
+5) Rollback
+- To rollback: revert the last commit that triggered the broken deploy and push, then run `npx vercel --prod --yes --cwd botaqi-web` to deploy the previous state.
+
+6) Security
+- Never commit `envs/` or service account files. Provide all runtime secrets through Vercel Project Environment variables or GCP Secret Manager.
+
+
