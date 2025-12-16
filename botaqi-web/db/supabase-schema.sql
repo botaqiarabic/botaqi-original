@@ -91,19 +91,150 @@ CREATE INDEX IF NOT EXISTS idx_api_usage_user ON user_api_usage(user_id);
 CREATE INDEX IF NOT EXISTS idx_api_usage_user_period ON user_api_usage(user_id, period);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_srs_unique ON srs_data(user_id, card_id);
 
--- Row Level Security (RLS) - Enable per Supabase console
--- Uncomment and run in Supabase SQL Editor to enable RLS:
---
--- ALTER TABLE users ENABLE ROW LEVEL SECURITY;
--- ALTER TABLE srs_data ENABLE ROW LEVEL SECURITY;
--- ALTER TABLE user_progress ENABLE ROW LEVEL SECURITY;
--- ALTER TABLE user_api_usage ENABLE ROW LEVEL SECURITY;
---
--- CREATE POLICY "users can access own srs" ON srs_data
---   USING (user_id = auth.uid());
---
--- CREATE POLICY "users can access own progress" ON user_progress
---   USING (user_id = auth.uid());
---
--- CREATE POLICY "users can access own api_usage" ON user_api_usage
---   USING (user_id = auth.uid());
+
+-- Additional tables (compatibility with existing app code)
+-- Profiles (app-level user record used across frontend)
+CREATE TABLE IF NOT EXISTS profiles (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  clerk_user_id TEXT UNIQUE,
+  name TEXT,
+  email TEXT,
+  avatar_url TEXT,
+  gender TEXT,
+  age_range TEXT,
+  occupation TEXT,
+  learning_goals TEXT[],
+  difficulty_level TEXT,
+  preferred_categories TEXT[],
+  total_points INTEGER DEFAULT 0,
+  level INTEGER DEFAULT 1,
+  streak INTEGER DEFAULT 0,
+  total_study_time INTEGER DEFAULT 0,
+  average_accuracy DECIMAL(5,2) DEFAULT 0.00,
+  coins INTEGER DEFAULT 1000,
+  onboarding_completed BOOLEAN DEFAULT FALSE,
+  onboarding_data JSONB,
+  preferences JSONB,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Categories and Flashcards (content)
+CREATE TABLE IF NOT EXISTS categories (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT,
+  color TEXT,
+  icon TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS flashcards (
+  id TEXT PRIMARY KEY,
+  category_id TEXT REFERENCES categories(id) ON DELETE CASCADE,
+  difficulty INTEGER CHECK (difficulty BETWEEN 1 AND 5),
+  front TEXT NOT NULL,
+  back TEXT NOT NULL,
+  hint TEXT,
+  example TEXT,
+  audio_url TEXT,
+  tags TEXT[],
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Study sessions & session_cards
+CREATE TABLE IF NOT EXISTS study_sessions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  category_id TEXT REFERENCES categories(id),
+  session_type TEXT,
+  cards_studied INTEGER DEFAULT 0,
+  correct_answers INTEGER DEFAULT 0,
+  incorrect_answers INTEGER DEFAULT 0,
+  time_spent INTEGER DEFAULT 0,
+  points_earned INTEGER DEFAULT 0,
+  accuracy DECIMAL(5,2) DEFAULT 0.00,
+  started_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  completed_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS session_cards (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  session_id UUID REFERENCES study_sessions(id) ON DELETE CASCADE,
+  card_id TEXT REFERENCES flashcards(id) ON DELETE CASCADE,
+  user_answer TEXT,
+  correct BOOLEAN,
+  time_spent INTEGER,
+  difficulty_adjustment DECIMAL(3,2),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Achievements & vouchers
+CREATE TABLE IF NOT EXISTS achievements (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT,
+  icon TEXT,
+  color TEXT,
+  points_required INTEGER,
+  criteria JSONB,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS user_achievements (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  achievement_id TEXT REFERENCES achievements(id) ON DELETE CASCADE,
+  unlocked_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(user_id, achievement_id)
+);
+
+CREATE TABLE IF NOT EXISTS vouchers (
+  id TEXT PRIMARY KEY,
+  code TEXT UNIQUE NOT NULL,
+  description TEXT NOT NULL,
+  points_required INTEGER NOT NULL,
+  max_uses INTEGER DEFAULT 1,
+  used_count INTEGER DEFAULT 0,
+  expires_at TIMESTAMP WITH TIME ZONE,
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS user_vouchers (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  voucher_id TEXT REFERENCES vouchers(id) ON DELETE CASCADE,
+  claimed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(user_id, voucher_id)
+);
+
+-- AI adaptations
+CREATE TABLE IF NOT EXISTS ai_adaptations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  card_id TEXT REFERENCES flashcards(id) ON DELETE CASCADE,
+  previous_difficulty DECIMAL(3,2),
+  new_difficulty DECIMAL(3,2),
+  confidence DECIMAL(3,2),
+  reasoning TEXT,
+  performance_data JSONB,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Public read access policies are recommended for categories/flashcards
+-- Indexes
+CREATE INDEX IF NOT EXISTS idx_profiles_clerk_user_id ON profiles(clerk_user_id);
+CREATE INDEX IF NOT EXISTS idx_user_progress_user_id ON user_progress(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_progress_next_review ON user_progress(next_review);
+CREATE INDEX IF NOT EXISTS idx_study_sessions_user_id ON study_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_session_cards_session_id ON session_cards(session_id);
+CREATE INDEX IF NOT EXISTS idx_user_achievements_user_id ON user_achievements(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_vouchers_user_id ON user_vouchers(user_id);
+CREATE INDEX IF NOT EXISTS idx_ai_adaptations_user_id ON ai_adaptations(user_id);
+
+-- RLS policy examples (run in Supabase SQL editor when enabling RLS)
+-- ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+-- CREATE POLICY "Users can view own profile" ON profiles FOR ALL USING (clerk_user_id = auth.jwt() ->> 'sub');
