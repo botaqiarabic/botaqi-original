@@ -27,3 +27,7 @@ node_modules/
 # Local envs directory (do not commit)
 /envs/
 .vercel
+
+# Gulfara local secrets (migrated to envs/gulfara)
+gulfara/.env
+gulfara/.env.staging
