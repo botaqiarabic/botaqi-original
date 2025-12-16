@@ -18,40 +18,12 @@ node_modules/
 # keep log files out of git
 *.log
 
-#
-# Public / client-side Firebase config (safe to include in example; fill with real values locally)
-#NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyAfLcZq8GI9O4r7hUDyujb3MLCDiXvIipc
-#NEXT_PUBLIC_FIREBASE_PROJECT_ID=botaqiy-arabic-learning
-#NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=botaqiy-arabic-learning.firebaseapp.com
-#NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=botaqiy-arabic-learning.firebasestorage.app
-#NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=238069744578
-#NEXT_PUBLIC_FIREBASE_APP_ID=1:238069744578:web:b2fce8dda3a96d507f4c5b
-#NEXT_PUBLIC_USE_FIREBASE=true
-#NEXT_PUBLIC_DUAL_WRITE_MODE=false
-
-# Client feature flags / dev
-#VITE_USE_EDGE_REVIEW=false
-#VITE_USE_EDGE_AI_PROXY=false
-#VITE_APP_BASE_URL=http://localhost:3000
-
-# Server secrets (DO NOT COMMIT real values; set in Vercel/GitHub Secrets)
-# FIREBASE_ADMIN_KEY: base64(service-account.json)
-# FIREBASE_ADMIN_KEY=
-
-# API key required by /api/logBlocked (32-byte base64 recommended)
-#LOGBLOCKED_API_KEY=yl6tLWIxdL53oJs4aMjMrn9QszAFY7PEDVzK8wLMvQE=
-
-# AI provider (server-side)
-#OPENAI_API_KEY=REPLACE_WITH_OPENAI_KEY
-#OPENAI_MODEL=gpt-4o-mini
-#OPENAI_USER_MONTHLY_CAP=0.3
-
-# Local emulator (development only)
-#FIRESTORE_EMULATOR_HOST=localhost:8081
-
-# Runtime
-#NODE_ENV=development
+#girliepop
 
 # Local secrets for botaqi-web
 /botaqi-web/.env
 /botaqi-web/service-account.json
+
+# Local envs directory (do not commit)
+/envs/
+.vercel
