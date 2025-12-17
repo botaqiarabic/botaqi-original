@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __testDir = path.dirname(fileURLToPath(import.meta.url));
 
 test('practice emits telemetry events', async ({ page }) => {
   // Ensure feature flag for metrics is enabled in the test environment
@@ -35,7 +38,7 @@ test('practice emits telemetry events', async ({ page }) => {
     path.join(process.cwd(), 'telemetry-server.jsonl'),
     path.join(process.cwd(), 'botaqi-web', 'telemetry-server.jsonl'),
     path.join(process.cwd(), '..', 'botaqi-web', 'telemetry-server.jsonl'),
-    path.join(__dirname, '..', '..', 'telemetry-server.jsonl'),
+    path.join(__testDir, '..', '..', 'telemetry-server.jsonl'),
   ];
 
   let lines: string[] = [];
