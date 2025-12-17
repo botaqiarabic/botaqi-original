@@ -28,8 +28,10 @@ app.get('/api/test-sentry', async (req, res) => {
 // Minimal telemetry ingestion endpoint for Phase 3 validation
 app.post('/api/telemetry', async (req, res) => {
   try {
-    const body = req.body;
-    if (!body || typeof body.eventName !== 'string') {
+    const body = req.body || {};
+    // Accept either `eventName` or `type` from clients
+    const eventName = typeof body.eventName === 'string' ? body.eventName : (typeof body.type === 'string' ? body.type : null);
+    if (!eventName) {
       return res.status(400).json({ ok: false, reason: 'invalid payload' });
     }
 
@@ -37,8 +39,13 @@ app.post('/api/telemetry', async (req, res) => {
     const fs = require('fs');
     const p = require('path');
     const out = p.join(__dirname, 'telemetry-server.jsonl');
-    const entry = JSON.stringify({ eventName: body.eventName, payload: body.payload || {}, ts: body.ts || new Date().toISOString() });
-    fs.appendFileSync(out, entry + '\n');
+    const normalized = {
+      eventName,
+      type: body.type ?? eventName,
+      payload: body.payload || {},
+      ts: body.ts || new Date().toISOString(),
+    };
+    fs.appendFileSync(out, JSON.stringify(normalized) + '\n');
 
     // keep lightweight and non-blocking
     return res.status(200).json({ ok: true });

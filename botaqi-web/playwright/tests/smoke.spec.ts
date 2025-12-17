@@ -31,23 +31,32 @@ test('practice emits telemetry events', async ({ page }) => {
   await page.waitForTimeout(500);
 
   // Read server-side telemetry file written by server.cjs
-  const serverLog = path.join(process.cwd(), 'telemetry-server.jsonl');
+  const candidates = [
+    path.join(process.cwd(), 'telemetry-server.jsonl'),
+    path.join(process.cwd(), 'botaqi-web', 'telemetry-server.jsonl'),
+    path.join(process.cwd(), '..', 'botaqi-web', 'telemetry-server.jsonl'),
+    path.join(__dirname, '..', '..', 'telemetry-server.jsonl'),
+  ];
+
   let lines: string[] = [];
   const start = Date.now();
   while (Date.now() - start < 5000) {
-    if (fs.existsSync(serverLog)) {
-      const content = fs.readFileSync(serverLog, 'utf8').trim();
-      if (content) {
-        lines = content.split(/\r?\n/).filter(Boolean);
-        break;
+    for (const candidate of candidates) {
+      if (fs.existsSync(candidate)) {
+        const content = fs.readFileSync(candidate, 'utf8').trim();
+        if (content) {
+          lines = content.split(/\r?\n/).filter(Boolean);
+          break;
+        }
       }
     }
+    if (lines.length) break;
     await new Promise(r => setTimeout(r, 100));
   }
 
   expect(lines.length).toBeGreaterThanOrEqual(2);
   const events = lines.map(l => JSON.parse(l));
-  const names = events.map(e => e.eventName).sort();
+  const names = events.map(e => e.eventName || e.type).filter(Boolean).sort();
   expect(names).toContain('session_started');
   expect(names).toContain('reviewed_card');
 

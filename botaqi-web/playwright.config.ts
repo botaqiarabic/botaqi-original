@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import path from 'path';
 
 export default defineConfig({
   testDir: './playwright/tests',
@@ -17,6 +18,8 @@ export default defineConfig({
     // Run the local server so API endpoints (e.g. /api/telemetry) are available during E2E
     command: 'node server.cjs',
     url: 'http://localhost:4173',
+    // Ensure server is started with working dir explicitly pointing to botaqi-web
+    cwd: path.join(__dirname),
     reuseExistingServer: false,
     timeout: 120_000,
   },
