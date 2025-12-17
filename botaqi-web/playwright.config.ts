@@ -19,7 +19,7 @@ export default defineConfig({
     command: 'node server.cjs',
     url: 'http://localhost:4173',
     // Ensure server is started with working dir explicitly pointing to botaqi-web
-    cwd: path.join(__dirname),
+    cwd: process.cwd(),
     reuseExistingServer: false,
     timeout: 120_000,
   },
