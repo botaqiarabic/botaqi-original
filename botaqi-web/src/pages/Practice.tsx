@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import telemetry from '../lib/telemetry';
+import { isFeatureEnabled } from '../lib/featureFlags';
 
 interface SRSData {
   id: string;
@@ -33,6 +35,8 @@ const Practice: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showResults, setShowResults] = useState(false);
   const [sessionComplete, setSessionComplete] = useState(false);
+  const [serverStatus, setServerStatus] = useState<'unknown' | 'ok' | 'warn' | 'error'>('unknown');
+  const [serverMessage, setServerMessage] = useState<string | null>(null);
 
   const loadPracticeSession = async () => {
     setIsLoading(true);
@@ -90,6 +94,47 @@ const Practice: React.FC = () => {
     loadPracticeSession();
   }, []);
 
+  // Health check for minimal server status indicator
+  const performStatusCheck = async () => {
+    try {
+      const r = await fetch('/api/status', { method: 'GET' });
+      if (!r.ok) {
+        setServerStatus('error');
+        setServerMessage(`status:${r.status}`);
+        return;
+      }
+      const j = await r.json();
+      if (j && (j.auth && j.auth.ok || j.db && j.db.ok)) {
+        setServerStatus('ok');
+        setServerMessage(null);
+      } else {
+        setServerStatus('warn');
+        setServerMessage(j.auth?.reason || j.db?.reason || 'degraded');
+      }
+    } catch (e) {
+      setServerStatus('error');
+      setServerMessage('network');
+    }
+  };
+
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) performStatusCheck();
+    return () => { mounted = false; };
+  }, []);
+
+  useEffect(() => {
+    if (!isLoading && session.cards.length > 0) {
+      try {
+        if (isFeatureEnabled('metrics-collection')) {
+          telemetry.emit('session_started', { page: 'practice', cards: session.cards.length });
+        }
+      } catch (e) {
+        // swallow telemetry errors
+      }
+    }
+  }, [isLoading]);
+
   const handleAnswer = async (correct: boolean, timeSpent: number) => {
     const currentCard = session.cards[session.currentIndex];
     if (!currentCard) return;
@@ -98,7 +143,14 @@ const Practice: React.FC = () => {
     const newScore = correct ? session.score + 1 : session.score;
     const newTimeSpent = session.timeSpent + timeSpent;
 
-    // TODO: Update card in SRS system
+    // Emit telemetry and update card in SRS system
+    try {
+      if (isFeatureEnabled('metrics-collection')) {
+        telemetry.emit('reviewed_card', { cardId: currentCard.id, correct, timeSpent });
+      }
+    } catch (e) {
+      // ignore telemetry failures
+    }
     console.log('Card answered:', { correct, timeSpent, card: currentCard });
 
     // Move to next card or complete session
@@ -203,6 +255,32 @@ const Practice: React.FC = () => {
 
   return (
     <div className="max-w-2xl mx-auto">
+      {/* Server health indicator */}
+      <div className="flex justify-end mb-4">
+        <div className="flex items-center text-sm space-x-2">
+          <span
+            className={
+              serverStatus === 'ok'
+                ? 'w-3 h-3 rounded-full bg-green-500 block'
+                : serverStatus === 'warn'
+                ? 'w-3 h-3 rounded-full bg-yellow-400 block'
+                : serverStatus === 'error'
+                ? 'w-3 h-3 rounded-full bg-red-500 block'
+                : 'w-3 h-3 rounded-full bg-gray-300 block'
+            }
+          />
+          <span className="text-gray-600">
+            {serverStatus === 'ok' ? (language === 'en' ? 'Server OK' : 'الخادم جاهز') : serverStatus === 'warn' ? (language === 'en' ? 'Server Degraded' : 'الخادم متدهور') : serverStatus === 'error' ? (language === 'en' ? 'Server Unreachable' : 'لا يمكن الوصول للخادم') : (language === 'en' ? 'Checking...' : 'جارٍ الفحص...')}
+            {serverMessage ? ` · ${serverMessage}` : ''}
+          </span>
+          <button
+            onClick={() => performStatusCheck()}
+            className="ml-3 px-3 py-1 bg-gray-100 rounded text-xs text-gray-700 hover:bg-gray-200"
+          >
+            {language === 'en' ? 'Retry' : 'إعادة الفحص'}
+          </button>
+        </div>
+      </div>
       {/* Progress */}
       <div className="mb-6">
         <div className="flex justify-between text-sm text-gray-600 mb-2">

@@ -3,7 +3,7 @@
 **Goal:** Ship Botaqi MVP to Vercel production with security remediation.  
 **Owner:** Project team  
 **Timeline:** ~1 hour  
-**Status:** 🔴 NOT STARTED — Awaiting manual secret rotation
+**Status:** � NOT STARTED — Awaiting manual secret rotation
 
 ---
 

@@ -4,17 +4,23 @@
     "version": "0.0.0",
     "type": "module",
     "engines": {
-        "node": ">=20"
+        "node": ">=20",
+        "npm": ">=9"
     },
     "scripts": {
         "dev": "vite",
+        "preinstall": "node -e \"const v=process.versions.node.split('.').map(Number); if (v[0]<20) { console.error('ERROR: Node >= 20 is required. You are using', process.version); process.exit(1); }\"",
         "verify:env": "node scripts/verify-env.js",
         "build": "tsc -b && vite build",
+        "playwright:install": "npx playwright install --with-deps",
+        "test:e2e": "npx playwright test",
         "vercel-build": "npm run build",
         "vercel:build": "npm run vercel-build",
         "lint": "eslint .",
         "preview": "vite preview",
         "start": "node server.cjs",
+        "start:prod": "node server.cjs",
+        "ci": "npm run verify:env && npm run build",
         "test": "echo 'Tests pending' && exit 0"
     },
     "dependencies": {
@@ -56,6 +62,7 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.9.0",
+        "@playwright/test": "^1.57.0",
         "@tailwindcss/postcss": "^4.1.18",
         "@types/react": "^18.3.3",
         "@types/react-dom": "^18.3.0",
@@ -71,5 +78,21 @@
         "typescript-eslint": "^8.0.1",
         "vite": "^7.1.10"
     },
-    "license": "ISC"
+    "license": "UNLICENSED",
+    "description": "Botaqi — Local‑first Arabic learning app (PRODUCT v1). Frontend pivots to client‑side persistence, sharing and export/import for rapid MVP.",
+    "main": "server.cjs",
+    "packageManager": "npm@9",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/yourorg/yourrepo"
+    },
+    "homepage": "",
+    "bugs": {
+        "url": ""
+    },
+    "directories": {
+        "doc": "docs"
+    },
+    "author": "",
+    "keywords": ["botaqi","arabic","srs","spaced-repetition","flashcards","local-first"]
 }
